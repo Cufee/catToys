@@ -1,0 +1,11 @@
+{
+    "userId":       "User ID",
+    "id":           "Channel ID",
+    "token":        "Username",
+    "suspended":    "Suspended",
+    "vodsEnabled":  "VODs Enabled",
+    "createdAt":    "Created at",
+    "isLSEnabled":  "Lightstream",
+    "xuid":         "XUID",
+    "email":        "Email"
+}
