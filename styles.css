@@ -20,14 +20,12 @@ div {
 Header
 */
 #app-version {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    position: absolute;
     background-color: #858585;
     color: white;
     font-size: 0.65rem;
     padding: 0px 7px;
-    margin: 0px 0px;
+    margin: 0px;
     border-radius: 5px;
 }
 #app-name {

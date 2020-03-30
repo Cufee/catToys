@@ -6,6 +6,7 @@
     "vodsEnabled":  "VODs Enabled",
     "createdAt":    "Created at",
     "isLSEnabled":  "Lightstream",
+    "sparks":       "Sparks",
     "xuid":         "XUID",
     "email":        "Email"
 }

@@ -1,15 +1,17 @@
 //Version
-var scriptVersion = 'alpha-v0.1';
+var scriptVersion = 'v0.2';
 document.getElementById('app-version').innerHTML = scriptVersion;
-//API
+//API url
 var apiUrl = 'https://mixer.com/api/v1/channels/';
 
+//Return URL from apiUrl and user input
 function buildUrl(name) {
     console.log('Building URL')
     var url = apiUrl + name;
     return url
 }
 
+//Return JSON object from url
 function Get(url) {
     console.log('Creating API dump for ' + url)
     //Return response as String
@@ -27,6 +29,7 @@ function Get(url) {
     }   
 }
 
+//Return Lightstream status from id(aka ChannelId)
 function parseLightstream(channelId) {
     console.log('Parsing Lighstream')
     videoUrl = apiUrl + channelId.toString() + '/videoSettings';
@@ -36,10 +39,12 @@ function parseLightstream(channelId) {
     return lightstream;
 }
 
+//Parse JSON Object for keys defined in keys variable
 function parseApi(keys, rawData) {
     console.log('Parsing API dump')
     var allKeys = JSON.parse(Get(keys + '.json'));
     var apiName;
+    var parseResult = new Object();
     for (apiName in allKeys) {
         //Parse String as JSON
         var status = rawData[apiName];
@@ -48,17 +53,28 @@ function parseApi(keys, rawData) {
         if (apiName == 'createdAt') {
             status = status.substr(0,10);
         }
+        //Gettings Sparks
+        if (apiName == 'sparks') {
+            status = rawData.user.sparks;
+        }
+        //Parsing Lighstream
         if (apiName == 'isLSEnabled') {
             status = parseLightstream(rawData['id']);
         }
-        buildTable(humanApiName, status);
+        if (status === undefined) {status = ''}
+        parseResult[humanApiName] = status
     }
+    buildTable(parseResult)
 }
 
-function buildTable(name, status) {
-    var template = $("#table-template").html();
-    var tableRow = Mustache.render(template, {name: name, status: status});
-    $("table").append(tableRow);
+
+function buildTable(parseResult) {
+    for (var name in parseResult) {
+        status = parseResult[name]
+        var template = $("#table-template").html();
+        var tableRow = Mustache.render(template, {name: name, status: status});
+        $("table").append(tableRow);
+    }    
 }
 
 function resetHtml(htmlTag) {
