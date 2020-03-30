@@ -61,7 +61,6 @@ function parseApi(keys, rawData) {
         if (apiName == 'isLSEnabled') {
             status = parseLightstream(rawData['id']);
         }
-        if (status === undefined) {status = ''}
         parseResult[humanApiName] = status
     }
     buildTable(parseResult)
@@ -71,6 +70,7 @@ function parseApi(keys, rawData) {
 function buildTable(parseResult) {
     for (var name in parseResult) {
         status = parseResult[name]
+        if (status === 'undefined') {break; console.log('Break')}
         var template = $("#table-template").html();
         var tableRow = Mustache.render(template, {name: name, status: status});
         $("table").append(tableRow);
