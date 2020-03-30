@@ -2,6 +2,7 @@
     "userId":       "User ID",
     "id":           "Channel ID",
     "token":        "Username",
+    "groups":       "Groups",
     "suspended":    "Suspended",
     "vodsEnabled":  "VODs Enabled",
     "createdAt":    "Created at",
