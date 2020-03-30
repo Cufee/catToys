@@ -5,6 +5,7 @@
     "description": "A tool for looking up user information on Mixer.com",
     "content_scripts": [
         {
+            "matches": ["<all_urls>"],
             "js": ["content.js"]
         }
     ],
