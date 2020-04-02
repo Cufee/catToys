@@ -1,5 +1,5 @@
 //Version
-var scriptVersion = 'v0.2.2';
+var scriptVersion = 'v0.2.3';
 document.getElementById('app-version').innerHTML = scriptVersion;
 //API url
 var apiUrl = 'https://mixer.com/api/v1/channels/';
@@ -13,47 +13,66 @@ function buildUrl(name) {
 
 //Return JSON object from url
 function Get(url) {
-    console.log('Creating API dump for ' + url)
-    //Return response as String
+    console.log('Creating API dump for ' + url);
+    //Get JSON from URL and check status code
     var Httpreq = new XMLHttpRequest();
     Httpreq.open("GET", url, false);
     Httpreq.send(null);
-    var response = Httpreq.responseText
-    var statusCode = JSON.parse(response)['statusCode']
-    console.log('Status Code ' + statusCode)
-    if (statusCode == 404) {
-        var badResponse = '{"statusCode":404}';
-        console.log(badResponse)
-        return badResponse;
-    }
-    else {
-        console.log(typeof(response))
-        return response.toString();
-    }   
+    var response = JSON.parse(Httpreq.responseText);
+    var statusCode = Httpreq.status;
+    response.statusCode = statusCode;
+    console.log(response)
+    return response
 }
 
 //Return Lightstream status from id(aka ChannelId)
 function parseLightstream(channelId) {
     console.log('Parsing Lighstream')
-    videoUrl = apiUrl + channelId.toString() + '/videoSettings';
-    var rawData = JSON.parse(Get(videoUrl));
-    if (rawData['statusCode']  === 404){rawData['isLSEnabled'] = 'not a Pro';}
-    console.log(rawData)
-    var lightstream = rawData['isLSEnabled'];
-    console.log(lightstream, rawData);
-    return lightstream;
+    videoUrl = `${apiUrl}${channelId}/videoSettings`;
+    var rawData = Get(videoUrl);
+    if (rawData['statusCode']  !== 200){
+        var lightstream = `false ${rawData['statusCode']}`;
+        return lightstream;
+    }
+    else {
+        var lightstream = rawData['isLSEnabled'];
+        console.log(lightstream);
+        return lightstream;
+    }
+}
+
+//Return xuid from id(aka ChannelId)
+function parseXuid(channelId) {
+    console.log('Parsing Lighstream')
+    videoUrl = `${apiUrl}${channelId}/xuid`;
+    var rawData = Get(videoUrl);
+    if (rawData['statusCode']  !== 200){xuid = `failed ${rawData['statusCode']}`;}
+    else {
+        var xuid = rawData['xuid'];
+    }
+    console.log(xuid);
+    return xuid;
 }
 
 //Parse JSON Object for keys defined in keys variable
 function parseApi(keys, rawData) {
     console.log('Parsing API dump')
-    var allKeys = JSON.parse(Get(keys + '.json'));
+    var allKeys = Get(keys + '.json');
     var apiName;
     var parseResult = new Object();
     for (apiName in allKeys) {
         //Parse String as JSON
         var status = rawData[apiName];
+        //Custom rules below
         var humanApiName =  allKeys[apiName];
+        //Save statusCode
+        if (apiName == 'statusCode') {
+            humanApiName = apiName;
+        }
+        //Getting xuid
+        if (apiName == 'xuid') {
+            status = parseXuid(rawData['id']);
+        }
         //Formatting date
         if (apiName == 'createdAt') {
             status = status.substr(0,10);
@@ -78,25 +97,31 @@ function parseApi(keys, rawData) {
         }
         parseResult[humanApiName] = status
     }
-    buildTable(parseResult)
+    return parseResult
 }
 
 
 function buildTable(parseResult) {
     for (var name in parseResult) {
         status = parseResult[name]
-        if (status === 'undefined') {break; console.log('Break')}
-        var template = $("#table-template").html();
-        var tableRow = Mustache.render(template, {name: name, status: status});
-        $("table").append(tableRow);
+        console.log(name, status)
+        if (status == 'undefined') {console.log(name)}
+        else if (name === 'statusCode') {console.log(name)}
+        else {
+            var template = $("#table-template").html();
+            var tableRow = Mustache.render(template, {name: name, status: status});
+            $("table").append(tableRow);
+        }
     }    
 }
 
+//Delede existing elements with id="generated"
 function resetHtml(htmlTag) {
     document.getElementById(htmlTag).innerHTML = '';
     console.log('Clearing old HTML');
 }
 
+//Check if imput is valid and call functions
 function apiRunner() {
     var input = document.getElementById("api-search-box").value;
     if (input.length <= 2) {
@@ -105,10 +130,16 @@ function apiRunner() {
     else {
         resetHtml('generated');
         var url = buildUrl(input);
-        var rawData = JSON.parse(Get(url));
-        if (rawData["statusCode"] === 404) {alert("User not found, API returned 404");}
-        var keys = 'apiList'
-        parseApi(keys, rawData);
+        var rawData = Get(url);
+        console.log(`Raw data status ${rawData["statusCode"]}`)
+        if (rawData['statusCode'] !== 200) {
+            alert('User not found')
+        }
+        else {
+            var keys = 'apiList' 
+            var parseResult = parseApi(keys, rawData);
+            buildTable(parseResult)
+        }    
     }
 }
 

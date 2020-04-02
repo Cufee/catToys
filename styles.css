@@ -65,3 +65,13 @@ ApiRunner
 button {
     text-align: center;
 }
+
+/*
+Error message
+*/
+#error-message {
+    position: absolute;
+}
+#error-message-text {
+    text-align: center;
+}
