@@ -1,5 +1,5 @@
 //Version
-var scriptVersion = 'v0.2.3';
+var scriptVersion = 'v0.2.4';
 document.getElementById('app-version').innerHTML = scriptVersion;
 //API url
 var apiUrl = 'https://mixer.com/api/v1/channels/';
@@ -71,7 +71,7 @@ function parseApi(keys, rawData) {
         }
         //Getting xuid
         if (apiName == 'xuid') {
-            status = parseXuid(rawData['id']);
+            status = parseXuid(rawData['userId']);
         }
         //Formatting date
         if (apiName == 'createdAt') {
