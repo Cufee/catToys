@@ -1,6 +1,6 @@
 {
     "name" : "catToys",
-    "version": "0.2.5",
+    "version": "0.2.6",
     "manifest_version": 2,
     "description": "A tool for looking up user information on Mixer.com",
     "content_scripts": [
