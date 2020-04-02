@@ -1,13 +1,13 @@
 //Version
-var scriptVersion = 'v0.2.4';
+var scriptVersion = 'v0.2.5';
 document.getElementById('app-version').innerHTML = scriptVersion;
 //API url
-var apiUrl = 'https://mixer.com/api/v1/channels/';
+var apiUrl = 'https://mixer.com/api/v1/';
 
 //Return URL from apiUrl and user input
 function buildUrl(name) {
     console.log('Building URL')
-    var url = apiUrl + name;
+    var url = `${apiUrl}channels/${name}`;
     return url
 }
 
@@ -28,7 +28,7 @@ function Get(url) {
 //Return Lightstream status from id(aka ChannelId)
 function parseLightstream(channelId) {
     console.log('Parsing Lighstream')
-    videoUrl = `${apiUrl}${channelId}/videoSettings`;
+    videoUrl = `${apiUrl}channels/${channelId}/videoSettings`;
     var rawData = Get(videoUrl);
     if (rawData['statusCode']  !== 200){
         var lightstream = `false ${rawData['statusCode']}`;
@@ -44,7 +44,7 @@ function parseLightstream(channelId) {
 //Return xuid from id(aka ChannelId)
 function parseXuid(channelId) {
     console.log('Parsing Lighstream')
-    videoUrl = `${apiUrl}${channelId}/xuid`;
+    videoUrl = `${apiUrl}users/${channelId}/xuid`;
     var rawData = Get(videoUrl);
     if (rawData['statusCode']  !== 200){xuid = `failed ${rawData['statusCode']}`;}
     else {
