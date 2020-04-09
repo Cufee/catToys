@@ -4,16 +4,12 @@
 General
 */
 body {
-    width: 225px;
-    height: 380px;
+    width: 280px;
+    height: 450px;
     font-family: 'Poppins', sans-serif;
 }
 div {
     padding: 5px;
-}
-.flex-container {
-    display: flex;
-    flex-direction: column;
 }
 
 /*
@@ -21,12 +17,13 @@ Header
 */
 #app-version {
     position: absolute;
+    top: 10px;
+    left: 10px;
     background-color: #858585;
     color: white;
     font-size: 0.65rem;
-    padding: 0px 7px;
-    margin: 0px;
     border-radius: 5px;
+    padding: 2px;
 }
 #app-name {
     display: flex;
@@ -34,8 +31,9 @@ Header
     align-items: center;
     font-size: 2.5em;
     margin: auto;
+    padding-top: 20px;
 }
-#search-box {
+#search-box1 {
     margin: auto;
     width: 80%;
     margin: auto;

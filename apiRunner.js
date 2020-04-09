@@ -20,8 +20,8 @@ function Get(url) {
     Httpreq.send(null);
     var statusCode = Httpreq.status;
     if (statusCode !== 200) {
-        var response = {"statusCode": statusCode}
-        return response
+        console.log(response)
+        return {"statusCode": statusCode};
     }
     else {
         var response = JSON.parse(Httpreq.responseText);
@@ -112,11 +112,11 @@ function buildTable(parseResult) {
     for (var name in parseResult) {
         status = parseResult[name]
         console.log(name, status)
-        if (status == 'undefined') {console.log(name)}
-        else if (name === 'statusCode') {console.log(name)}
+        if (status == 'undefined') {console.log(`Skipping ${name}`)}
+        else if (name === 'statusCode') {console.log(`Skipping ${name}`)}
         else {
             var template = $("#table-template").html();
-            var tableRow = Mustache.render(template, {name: name, status: status});
+            var tableRow = Mustache.render(template, {class: name, name: name, status: status});
             $("table").append(tableRow);
         }
     }    
