@@ -4,7 +4,7 @@
 General
 */
 body {
-    width: 280px;
+    width: 300px;
     height: 450px;
     font-family: 'Poppins', sans-serif;
 }
@@ -15,15 +15,17 @@ div {
 /*
 Header
 */
-#app-version {
+#app-info {
     position: absolute;
     top: 10px;
     left: 10px;
     background-color: #858585;
     color: white;
-    font-size: 0.65rem;
-    border-radius: 5px;
-    padding: 2px;
+    font-size: 0.8rem;
+    border-radius: 50%;
+    height: 20px;
+    width: 20px;
+    text-align: center;
 }
 #app-name {
     display: flex;
@@ -33,43 +35,21 @@ Header
     margin: auto;
     padding-top: 20px;
 }
-#search-box1 {
-    margin: auto;
-    width: 80%;
-    margin: auto;
-    text-align: center;
-}
-
-/*
-Feature
-*/
-.feature-name {
-    margin: auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-} 
-.feature-container {
-    margin: auto;
-}
 
 /*
 ApiRunner
 */
-.td_right {
-    text-align: center;
+table {
+    width: 100%;
+}
+.td-status {
     min-height: 40px;
 }
-button {
-    text-align: center;
+.td-name {
+    min-height: 40px;
+    width: 110px;
 }
-
-/*
-Error message
-*/
-#error-message {
-    position: absolute;
-}
-#error-message-text {
-    text-align: center;
+.status-table {
+    min-width: 100%;
+    border-bottom: 1px solid rgba(1, 1, 1, 0.1);
 }

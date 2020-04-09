@@ -1,6 +1,15 @@
 //Version
-var scriptVersion = 'v0.2.6';
-document.getElementById('app-version').innerHTML = scriptVersion;
+const appVersion = '1.0.0';
+const apiRunnerVersion = '1.0';
+const infoButton = document.querySelector('#app-info');
+const helpLink = '<a href="https://discordapp.com/invite/bf5hGgD" target="_blank">Help</a>'
+
+//Display Version when info icon is clicked
+infoButton.addEventListener("click", function () {
+    const msg = `App ${appVersion} / Api Runner ${apiRunnerVersion} ${helpLink}`
+    showAlert(msg, 'primary')
+})
+
 //API url
 var apiUrl = 'https://mixer.com/api/v1/';
 
@@ -107,7 +116,7 @@ function parseApi(keys, rawData) {
     return parseResult
 }
 
-
+//Build final table and append to html doc
 function buildTable(parseResult) {
     for (var name in parseResult) {
         status = parseResult[name]
@@ -128,19 +137,39 @@ function resetHtml(htmlTag) {
     console.log('Clearing old HTML');
 }
 
-//Check if imput is valid and call functions
+//Display error message with msg, type
+function showAlert(msg, type, timeout=3000) {
+    resetHtml('generated');
+    const alert = document.querySelector('#alert');
+    type = `alert-${type}`
+
+    alert.innerHTML = msg;
+    alert.classList.add('alert');
+    alert.classList.add(type);
+
+    const clearAlert = () => {
+        alert.classList.remove('alert');
+        alert.classList.remove(type);
+        alert.innerHTML = '';
+    }
+
+    setTimeout(() => clearAlert(), timeout);
+}
+
+//Check if input is valid and call functions
 function apiRunner() {
     var input = document.getElementById("api-search-box").value;
     if (input.length <= 2) {
-        alert("Enter username or CID");
+        showAlert('Invalid username or CID', 'warning');
     }
     else {
         resetHtml('generated');
         var url = buildUrl(input);
         var rawData = Get(url);
-        console.log(`Raw data status ${rawData["statusCode"]}`)
-        if (rawData['statusCode'] !== 200) {
-            alert('User not found')
+        var statusCode = rawData["statusCode"]
+        console.log(`Raw data status ${statusCode}`)
+        if (statusCode !== 200) {
+            showAlert(`User not found ${statusCode}`, 'danger')
         }
         else {
             var keys = 'apiList' 
